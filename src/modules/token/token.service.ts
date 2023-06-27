@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { UserUnPassword } from 'src/types/auth.interfaces';
+import { UserDtoUnPassword } from 'src/types/auth.interfaces';
 
 @Injectable()
 export class TokenService {
@@ -10,7 +10,7 @@ export class TokenService {
 		private readonly configService: ConfigService,
 	) {}
 
-	public async getToken(user: UserUnPassword): Promise<string> {
+	public async getToken(user: UserDtoUnPassword): Promise<string> {
 		const payload = { user };
 
 		return this.jwtService.sign(payload, {

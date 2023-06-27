@@ -6,11 +6,12 @@ import {
 } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { AppError } from 'src/common/error';
-import { UserUnPassword } from 'src/types/auth.interfaces';
+import { UserDtoUnPassword } from 'src/types/auth.interfaces';
 import { TokenService } from '../token/token.service';
 import { CreateUserDto } from '../users/dto/createUser.dto';
 import { UsersService } from '../users/users.service';
 import { LoginUserDto } from './dto/loginUser.dto';
+import { AuthResponse } from './response';
 
 @Injectable()
 export class AuthService {
@@ -19,12 +20,12 @@ export class AuthService {
 		private readonly tokenService: TokenService,
 	) {}
 
-	private async getToken(user: UserUnPassword): Promise<string> {
+	private async getToken(user: UserDtoUnPassword): Promise<string> {
 		const token = await this.tokenService.getToken(user);
 		return token;
 	}
 
-	public async register(dto: CreateUserDto) {
+	public async register(dto: CreateUserDto): Promise<AuthResponse> {
 		const newUser = await this.userService.create(dto);
 
 		const token = await this.getToken(newUser);
@@ -32,7 +33,7 @@ export class AuthService {
 		return { ...newUser, token };
 	}
 
-	public async login(dto: LoginUserDto) {
+	public async login(dto: LoginUserDto): Promise<AuthResponse> {
 		const user = await this.userService.findUser(dto.email);
 
 		if (!user) {
