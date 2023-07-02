@@ -9,6 +9,7 @@ import {
 import { CreateUserDto } from '../users/dto/createUser.dto';
 import { AuthService } from './auth.service';
 import { LoginUserDto } from './dto/loginUser.dto';
+import { RecoveryPasswordDto } from './dto/recovery-password.dto';
 import { AuthResponse } from './response';
 
 @Controller('auth')
@@ -24,6 +25,11 @@ export class AuthController {
 	@Post('register')
 	public async register(@Body() dto: CreateUserDto): Promise<AuthResponse> {
 		return this.authService.register(dto);
+	}
+
+	@Patch('password-recovery')
+	public async passwordRecovery(@Body() dto: RecoveryPasswordDto) {
+		return this.authService.passwordRecovery(dto);
 	}
 
 	@Patch('update')
